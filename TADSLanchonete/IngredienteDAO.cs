@@ -27,6 +27,28 @@ namespace TADSLanchonete
             return mensagem;
         }
 
+        internal static string Editar(int id)
+        {
+            string mensagem = "";
+             try
+            {
+                using (var ctx = new LanchoneteDBEntities())
+                {
+                    Ingrediente ingrediente = ctx.Ingredientes.FirstOrDefault(x => x.IdIngrediente == id);
+                    ctx.Ingredientes.Remove(ingrediente);
+                    ctx.SaveChanges();
+
+                    mensagem = "O ingrediente " + ingrediente.NomeIngrediente + " foi alterado com sucesso!";
+                }
+            }
+            catch (Exception ex) 
+            { 
+                mensagem = ex.Message;
+            }
+
+            return mensagem;
+        }
+
         internal static string Excluir(int id)
         {
             string mensagem = "";
@@ -65,6 +87,26 @@ namespace TADSLanchonete
             
             }
             return lista;
+        }
+
+        internal static string Visualizar(int id)
+        {
+            string mensagem = "";
+            try
+            {
+                using (var ctx = new LanchoneteDBEntities())
+                {
+                    Ingrediente ingrediente = ctx.Ingredientes.FirstOrDefault(x => x.IdIngrediente == id);
+
+                    mensagem = "INGREDIENTE: " + ingrediente.NomeIngrediente + " !";
+                }
+            }
+            catch (Exception ex)
+            {
+                mensagem = ex.Message;
+            }
+
+            return mensagem;
         }
     }
 }

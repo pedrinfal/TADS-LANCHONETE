@@ -72,7 +72,22 @@ namespace TADSLanchonete
                         Mensagem.InnerText = mensagem;
                         AtualizarListView();
                     }
+
+                    if (e.CommandName == "Editar")
+                    {
+                        string mensagem = IngredienteDAO.Editar(id);
+                        Mensagem.InnerText = mensagem;
+                        AtualizarListView();
+                    }
+                    if (e.CommandName == "Visualizar")
+                    {
+                        string mensagem = IngredienteDAO.Visualizar(id);
+                        Mensagem.InnerText = mensagem;
+                        AtualizarListView();
+                    }
                 }
+
+
             }
             catch (Exception ex)
             {

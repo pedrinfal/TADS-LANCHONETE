@@ -27,6 +27,11 @@ namespace TADSLanchonete
             return mensagem;
         }
 
+        internal static string Editar(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         internal static string Excluir(int id)
         {
             string mensagem = "";
@@ -73,6 +78,26 @@ namespace TADSLanchonete
             }
 
             return lista;
+        }
+
+        internal static string Visualizar(int id)
+        {
+            string mensagem = "";
+            try
+            {
+                using (var ctx = new LanchoneteDBEntities())
+                {
+                    Categoria categoria = ctx.Categorias.FirstOrDefault(x => x.IdCategoria == id);
+
+                    mensagem = "CATEGORIA: " + categoria.NomeCategoria + " !";
+                }
+            }
+            catch (Exception ex)
+            {
+                mensagem = ex.Message;
+            }
+
+            return mensagem;
         }
     }
 }
