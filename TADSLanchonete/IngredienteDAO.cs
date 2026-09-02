@@ -38,7 +38,7 @@ namespace TADSLanchonete
                     ctx.Ingredientes.Remove(ingrediente);
                     ctx.SaveChanges();
 
-                    mensagem = "O ingrediente " + ingrediente.NomeIngrediente + " foi alterado com sucesso!";
+                    mensagem = "INGREDIENTE: " + ingrediente.NomeIngrediente + " Está pronto para ser editado!";
                 }
             }
             catch (Exception ex) 
@@ -89,6 +89,20 @@ namespace TADSLanchonete
             return lista;
         }
 
+        internal static Ingrediente Listar(int id)
+        {
+            Ingrediente ingrediente = null;
+
+            using (var ctx = new LanchoneteDBEntities())
+            {
+                ingrediente = ctx.Ingredientes.FirstOrDefault(
+                    c => c.IdIngrediente.Equals(id));
+            }
+
+
+            return ingrediente;
+        }
+
         internal static string Visualizar(int id)
         {
             string mensagem = "";
@@ -98,7 +112,7 @@ namespace TADSLanchonete
                 {
                     Ingrediente ingrediente = ctx.Ingredientes.FirstOrDefault(x => x.IdIngrediente == id);
 
-                    mensagem = "INGREDIENTE: " + ingrediente.NomeIngrediente + " !";
+                    mensagem = "INGREDIENTE: " + ingrediente.NomeIngrediente + " ! O melhor ingrediente para o seu paladar!!";
                 }
             }
             catch (Exception ex)

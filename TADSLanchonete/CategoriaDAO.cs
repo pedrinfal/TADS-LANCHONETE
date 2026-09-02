@@ -27,9 +27,28 @@ namespace TADSLanchonete
             return mensagem;
         }
 
-        internal static string Editar(int id)
+        internal static string Editar(Categoria categoria)
         {
-            throw new NotImplementedException();
+            string mensagem = "";
+            try
+            {
+                using (var ctx = new LanchoneteDBEntities())
+                {
+                    Categoria categoriaVelha = ctx.Categorias.FirstOrDefault(c => c.IdCategoria == categoria.IdCategoria);
+
+                    categoriaVelha.NomeCategoria = categoria.NomeCategoria;
+
+                    ctx.SaveChanges();
+
+                    mensagem = "CATEGORIA: " + categoria.NomeCategoria + " Foi editada com sucesso!";
+                }
+            }
+            catch (Exception ex)
+            {
+                mensagem = ex.Message;
+            }
+
+            return mensagem;
         }
 
         internal static string Excluir(int id)
@@ -72,12 +91,24 @@ namespace TADSLanchonete
                     lista = ctx.Categorias.OrderBy(x => x.NomeCategoria).ToList();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                
+                throw;
             }
 
             return lista;
+        }
+
+        internal static Categoria Listar(int id)
+        {
+            Categoria categoria = null;
+
+            using (var ctx = new LanchoneteDBEntities())
+            {
+                categoria = ctx.Categorias.FirstOrDefault(c => c.IdCategoria.Equals(id));
+            }
+
+            return categoria;
         }
 
         internal static string Visualizar(int id)
@@ -89,7 +120,7 @@ namespace TADSLanchonete
                 {
                     Categoria categoria = ctx.Categorias.FirstOrDefault(x => x.IdCategoria == id);
 
-                    mensagem = "CATEGORIA: " + categoria.NomeCategoria + " !";
+                    mensagem = "CATEGORIA: " + categoria.NomeCategoria + " ! A melhor categoria para o seu paladar!";
                 }
             }
             catch (Exception ex)

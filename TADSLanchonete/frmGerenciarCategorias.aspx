@@ -46,6 +46,10 @@
                         <asp:Button ID="btnConfirmar" runat="server" Text="Cadastrar" CssClass="btn btn-primary" OnClick="btnConfirmar_Click" />
                     </div>
 
+                    <div class="mb-3">
+                        <a href="frmGerenciarCategorias.aspx" id="btnLinkCadastrar" runat="server" class="btn btn-primary" visible="false">Ir para Cadastrar Categorias</a>
+                    </div>
+
                     <!-- Mensagem de Retorno -->
                     <p id="Mensagem" runat="server" class="text-danger fw-bold"></p>
 
@@ -71,7 +75,7 @@
                                             <td class="text-center">
                                                 <asp:Button runat="server" ID="btnVisualizar" CommandName="Visualizar" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" Text="Visualizar" />
                                                 <asp:Button runat="server" ID="btnEditar" CommandName="Editar" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-warning" Text="Editar" />
-                                                <asp:Button runat="server" ID="btnExcluir" CommandName="Excluir" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-danger" Text="Excluir" />
+                                                <asp:Button runat="server" ID="btnExcluir" CommandName="Excluir" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-danger" Text="Excluir" OnClientClick="return confirm('Deseja realmente excluir essa categoria ?')"/>
                                             </td>
                                         </tr>
                                     </ItemTemplate>

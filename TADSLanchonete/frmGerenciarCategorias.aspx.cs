@@ -31,7 +31,7 @@ namespace TADSLanchonete
             }
 
             LvCategorias.DataSource = categorias;
-            LvCategorias.DataBind(); //Renderiza os elementos da tela.
+            LvCategorias.DataBind();
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
@@ -39,19 +39,41 @@ namespace TADSLanchonete
             try
             {
                 string nomecategoria = txtNomeCategoria.Value;
+                bool editando = false;
+
                 if (string.IsNullOrEmpty(nomecategoria))
                 {
                     Mensagem.InnerText = "O campo Nome Categoria precisa ser preenchido!";
                     return;
                 }
 
-                var categoria = new Categoria();
+                Categoria categoria = null;
+
+                if (ViewState["IdCategoria"] == null)
+                {
+                    categoria = new Categoria();
+                }
+                else
+                {
+                    int idCategoria = (int)ViewState["IdCategoria"];
+                    categoria = CategoriaDAO.Listar(idCategoria);
+                    editando = true;
+                }
+
                 categoria.NomeCategoria = nomecategoria;
 
-                Mensagem.InnerText = CategoriaDAO.Cadastrar(categoria);
+                if (!editando)
+                {
+                    Mensagem.InnerText = CategoriaDAO.Cadastrar(categoria);
+                }
+                else
+                {
+                    Mensagem.InnerText = CategoriaDAO.Editar(categoria);
+                    btnConfirmar.Text = "Cadastrar";
+                    ViewState["IdCategoria"] = null;
+                }
 
                 txtNomeCategoria.Value = "";
-
                 AtualizarListView();
             }
             catch (Exception ex)
@@ -72,17 +94,27 @@ namespace TADSLanchonete
                         Mensagem.InnerText = mensagem;
                         AtualizarListView();
                     }
-                    if (e.CommandName == "Editar")
+                    else if (e.CommandName == "Visualizar")
                     {
-                        string mensagem = CategoriaDAO.Editar(id);
-                        Mensagem.InnerText = mensagem;
-                        AtualizarListView();
-                    }
-                    if (e.CommandName == "Visualizar")
-                    {
+                        Categoria categoria = CategoriaDAO.Listar(id);
+
+                        bool visualizar = true;
+                        ModificarFormularioParaVisualizar(categoria, visualizar);
+
                         string mensagem = CategoriaDAO.Visualizar(id);
                         Mensagem.InnerText = mensagem;
                         AtualizarListView();
+                    }
+                    else if (e.CommandName == "Editar")
+                    {
+                        Categoria categoria = CategoriaDAO.Listar(id);
+
+                        bool visualizar = false;
+                        ModificarFormularioParaVisualizar(categoria, visualizar);
+
+                        EditarFormulario(categoria);
+
+                        Mensagem.InnerText = "Edite o nome da categoria e clique em Editar.";
                     }
                 }
             }
@@ -90,6 +122,24 @@ namespace TADSLanchonete
             {
                 Mensagem.InnerText = "Ocorreu um erro ao excluir: " + ex.Message;
             }
+        }
+
+        private void EditarFormulario(Categoria categoria)
+        {
+            btnConfirmar.Text = "Editar";
+            ViewState["IdCategoria"] = categoria.IdCategoria;
+        }
+
+        private void ModificarFormularioParaVisualizar(Categoria categoria, bool visualizar)
+        {
+            if (visualizar)
+            {
+                txtNomeCategoria.Disabled = true;
+                btnConfirmar.Visible = false;
+                btnLinkCadastrar.Visible = true;
+            }
+
+            txtNomeCategoria.Value = categoria.NomeCategoria;
         }
     }
 }

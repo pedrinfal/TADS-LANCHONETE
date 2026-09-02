@@ -72,6 +72,18 @@ namespace TADSLanchonete
                         Mensagem.InnerText = mensagem;
                         AtualizarListView();
                     }
+                    else if (e.CommandName == "Visualizar")
+                    {
+                        Ingrediente ingrediente = IngredienteDAO.Listar(id);
+                        ModificarFormularioParaVisualizar(ingrediente);
+
+
+
+
+                        string mensagem = IngredienteDAO.Visualizar(id);
+                        Mensagem.InnerText = mensagem;
+                        AtualizarListView();
+                    }
 
                     if (e.CommandName == "Editar")
                     {
@@ -79,12 +91,7 @@ namespace TADSLanchonete
                         Mensagem.InnerText = mensagem;
                         AtualizarListView();
                     }
-                    if (e.CommandName == "Visualizar")
-                    {
-                        string mensagem = IngredienteDAO.Visualizar(id);
-                        Mensagem.InnerText = mensagem;
-                        AtualizarListView();
-                    }
+                    
                 }
 
 
@@ -93,6 +100,14 @@ namespace TADSLanchonete
             {
                 Mensagem.InnerText = "Ocorreu um erro ao excluir: " + ex.Message;
             }
+        }
+
+        private void ModificarFormularioParaVisualizar(Ingrediente ingrediente)
+        {
+            txtNomeIngrediente.Disabled = true;
+            btnConfirmar.Visible = false;
+            btnLinkCadastrar.Visible = true;
+            txtNomeIngrediente.Value = ingrediente.NomeIngrediente;
         }
     }
 }
